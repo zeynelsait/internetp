@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Detail";
+}
+@model SoruModel
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary">Soru Detayı</h3>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Geri Dön</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title">Soru Bilgileri</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td><strong>Soru</strong></td>
+                            <td>@Model.Question</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cevap</strong></td>
+                            <td>@Model.Description</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer text-end">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Düzenle</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-sm">Sil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

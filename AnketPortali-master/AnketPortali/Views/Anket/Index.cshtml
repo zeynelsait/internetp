@@ -1,0 +1,194 @@
+﻿@model List<Anket>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container my-5">
+    <h3 class="text-center mb-4">Anketler</h3>
+
+    <!-- Progress Bar -->
+    <div class="mb-4" id="progress"></div>
+
+    <!-- Anketler Tablosu -->
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" id="tbAnket">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Anket Adı</th>
+                    <th>Durumu</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Title</td>
+                        <td>
+                            @if (Convert.ToBoolean(item.Status))
+                            {
+                                <a asp-action="ChangeStatus" asp-route-id="@item.Id" asp-route-st="False">
+                                    <span class="badge bg-success">Aktif</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="ChangeStatus" asp-route-id="@item.Id" asp-route-st="True">
+                                    <span class="badge bg-danger">Pasif</span>
+                                </a>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detay</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Düzenle</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Anket Form -->
+    <div class="card shadow-sm mt-5">
+        <div class="card-body">
+            <h4 class="card-title mb-3" id="baslik">Yeni Kayıt</h4>
+            <hr />
+            <div class="mb-3">
+                <label for="txtTitle" class="form-label">Anket İsmi</label>
+                <input type="text" name="title" class="form-control" id="txtTitle" placeholder="Anket adını giriniz" />
+            </div>
+            <div class="mb-3">
+                <label for="cbStatus" class="form-label">Durumu</label>
+                <select class="form-select" id="cbStatus">
+                    <option value="0">Bekliyor</option>
+                    <option value="1">Tamamlandı</option>
+                </select>
+            </div>
+            <input type="hidden" id="txtId" />
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-primary" id="btnKaydet">Kaydet</button>
+                <div>
+                    <button class="btn btn-secondary" id="btnVazgec" style="display: none;">Vazgeç</button>
+                    <button class="btn btn-danger" id="btnSil" style="display: none;">Sil</button>
+                </div>
+            </div>
+            <div class="alert mt-3" id="sonuc" style="display: none;"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            LoadAnkets();
+
+            function LoadAnkets() {
+                $("#btnVazgec, #btnSil, #sonuc").hide();
+                $("#baslik").html("Yeni Kayıt");
+                $("#txtTitle").val("");
+                $("#txtId").val("0");
+                $("#cbStatus").val(0);
+                $("#tbAnket tbody").empty();
+
+                $.ajax({
+                    url: "/Anket/AnketListAjax",
+                    type: "GET",
+                    success: function (data) {
+                        var i = 1;
+                        var t = 0, b = 0;
+                        $.each(data, function (index, item) {
+                            var statusClass = item.status == 0 ? "danger" : "success";
+                            var statusText = item.status == 0 ? "Bekliyor" : "Tamamlandı";
+                            var row = `
+                                <tr id="${item.id}">
+                                    <td>${i}</td>
+                                    <td>${item.title}</td>
+                                    <td><span class="badge bg-${statusClass}">${statusText}</span></td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-info detail" href="/Anket/Detail/${item.id}">Detay</a>
+                                        <a class="btn btn-sm btn-outline-warning edit" href="/Anket/Edit/${item.id}">Düzenle</a>
+                                        <a class="btn btn-sm btn-outline-danger delete" href="/Anket/Delete/${item.id}">Sil</a>
+                                    </td>
+                                </tr>
+                            `;
+                            $("#tbAnket tbody").append(row);
+                            item.status == 0 ? b++ : t++;
+                            i++;
+                        });
+
+                        var total = t + b;
+                        var yuzde = total > 0 ? Math.round((100 * t) / total) : 0;
+                        var progressBar = `
+                            <div class="progress" style="height: 30px;">
+                                <div class="progress-bar bg-success" style="width: ${yuzde}%" aria-valuenow="${yuzde}" aria-valuemin="0" aria-valuemax="100">
+                                    ${yuzde}%
+                                </div>
+                            </div>
+                        `;
+                        $("#progress").html(progressBar);
+                    },
+                    error: function () {
+                        console.error("Anket yükleme hatası.");
+                    }
+                });
+            }
+
+            $("#btnKaydet").click(function () {
+                var title = $("#txtTitle").val();
+                var status = $("#cbStatus").val();
+                var id = $("#txtId").val();
+
+                if (!title) {
+                    $("#sonuc").removeClass().addClass("alert alert-danger").html("Başlık Giriniz!").show();
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Anket/AnketAddEditAjax",
+                    type: "POST",
+                    data: { id, title, status },
+                    success: function (data) {
+                        $("#sonuc")
+                            .removeClass()
+                            .addClass(`alert alert-${data.status ? "success" : "danger"}`)
+                            .html(data.message)
+                            .show();
+                        LoadAnkets();
+                    },
+                    error: function () {
+                        console.error("Kaydetme hatası.");
+                    }
+                });
+            });
+
+            $("#btnVazgec").click(LoadAnkets);
+            $("#btnSil").click(function () {
+                var id = $("#txtId").val();
+                $.ajax({
+                    url: "/Anket/AnketRemoveAjax",
+                    type: "GET",
+                    data: { id },
+                    success: function (data) {
+                        $("#sonuc")
+                            .removeClass()
+                            .addClass(`alert alert-${data.status ? "success" : "danger"}`)
+                            .html(data.message)
+                            .show();
+                        LoadAnkets();
+                    },
+                    error: function () {
+                        console.error("Silme hatası.");
+                    }
+                });
+            });
+        });
+    </script>
+}

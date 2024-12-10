@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center custom-background">
+    <div class="text-box">
+        <h1 class="display-4">Zeynel Sait Balcı</h1>
+        <p>Hoşgeldiniz anket ve soru eklemek için yukarıdaki menüyü kullanabilirsiniz.</p>
+    </div>
+</div>
+
+<style>
+    .custom-background {
+        background-image: url('/img/123.jpeg'); /* Resim dosyasının yolu */
+        background-size: cover; /* Resmi alanın tamamını kaplayacak şekilde ölçeklendirir */
+        background-position: center; /* Resmi merkezler */
+        background-repeat: no-repeat; /* Resmin tekrar etmesini engeller */
+        padding: 20%; /* Üst ve alt boşluklar için */
+        border-radius: 30px; /* Hafif köşeleri yuvarlar */
+    }
+
+    .text-box {
+        background-color: rgba(0, 0, 0, 0.7); /* Siyah yarı saydam bir arka plan */
+        padding: 20px; /* İçerik etrafındaki boşluk */
+        border-radius: 10px; /* Köşeleri yuvarlar */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Gölgeli efekt */
+        color: white; /* Yazı rengini beyaz yapar */
+        display: inline-block; /* Kutunun genişliğini içeriğe göre ayarlar */
+    }
+
+        .text-box h1, .text-box p {
+            margin: 0; /* Varsayılan boşlukları kaldırır */
+        }
+</style>

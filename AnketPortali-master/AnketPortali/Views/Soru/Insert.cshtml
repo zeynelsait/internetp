@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Soru Ekle";
+}
+@model SoruModel
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary">Soru Ekle</h3>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Geri Dön</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form method="post" asp-action="Insert">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">Yeni Soru Oluştur</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Soru Alanı -->
+                        <div class="mb-3">
+                            <label asp-for="Question" class="form-label">Soru</label>
+                            <input type="text" class="form-control" asp-for="Question" placeholder="Sorunuzu buraya yazın" />
+                            <span asp-validation-for="Question" class="text-danger"></span>
+                        </div>
+                        <!-- Cevap Alanı -->
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Cevap</label>
+                            <textarea rows="4" class="form-control" asp-for="Description" placeholder="Cevabınızı buraya yazın"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <!-- Butonlar -->
+                        <input type="submit" value="Kaydet" class="btn btn-primary btn-sm" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

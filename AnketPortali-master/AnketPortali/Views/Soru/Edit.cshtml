@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Soruyu Düzenle";
+}
+@model SoruModel
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">Soru Düzenle</h1>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Geri Dön</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title">Soruyu Düzenleyin</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Edit">
+                        <div class="mb-3">
+                            <label asp-for="Question" class="form-label">Soru</label>
+                            <input type="text" class="form-control" asp-for="Question" placeholder="Soruyu buraya yazın">
+                            <span asp-validation-for="Question" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Cevap</label>
+                            <textarea rows="5" class="form-control" asp-for="Description" placeholder="Cevabı buraya yazın"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <input type="hidden" asp-for="Id" />
+                            <button type="submit" class="btn btn-success">Güncelle</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Geri Dön</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

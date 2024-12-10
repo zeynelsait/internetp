@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+@model RegisterModel
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">Yeni Hesap Oluştur</h1>
+        <a asp-action="Login" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left-circle"></i> Giriş Yap</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title">Kayıt Formu</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Register" method="post" enctype="multipart/form-data">
+                        <div class="alert alert-danger" asp-validation-summary="ModelOnly"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label">Ad Soyad</label>
+                            <input asp-for="FullName" class="form-control" placeholder="Adınızı ve soyadınızı girin" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">E-posta</label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresinizi girin" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
+                            <input asp-for="UserName" class="form-control" placeholder="Kullanıcı adınızı girin" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Şifre</label>
+                            <input type="password" asp-for="Password" class="form-control" placeholder="Şifrenizi girin" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PasswordConfirm" class="form-label">Şifre Tekrarı</label>
+                            <input type="password" asp-for="PasswordConfirm" class="form-control" placeholder="Şifrenizi tekrar girin" />
+                            <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="City" class="form-label">Şehir</label>
+                            <input asp-for="City" class="form-control" placeholder="Şehir adınızı girin" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-primary">Kaydol</button>
+                            <a asp-action="Login" class="btn btn-outline-secondary">Oturum Aç</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
